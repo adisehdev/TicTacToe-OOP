@@ -2,6 +2,7 @@
 
 #pragma once
 #include "Board.h"
+using namespace std;
 
 class Player
 {
