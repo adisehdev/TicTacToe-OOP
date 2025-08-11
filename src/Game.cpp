@@ -39,10 +39,17 @@ void Game::switchPlayer()
     currentPlayer = (currentPlayer == player1.get()) ? player2.get() : player1.get();
 }
 
+
+
 void Game::run()
 {
     while (true)
-    {
+    {   cout << "\nCurrent Player: " << currentPlayer->getSymbol() << endl;
+        if(currentPlayer->getSymbol() == 'X')
+        { // If the current player is the human player
+            board.humanStatus(); // Display empty cells for human player
+        }
+        cout << "\nCurrent Board State:\n";
         board.display();                          // display the current state of the board
         int move = currentPlayer->getMove(board); // get the move from the current player
         if (!board.placeMove(move, currentPlayer->getSymbol()))

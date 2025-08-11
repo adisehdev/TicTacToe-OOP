@@ -23,6 +23,7 @@ public:
     bool checkWin(char symbol) const; //function to check if a player has won
     bool isFull() const; //function to check if the board is full
     void reset(); //function to reset the board to its initial state
+    void humanStatus(); // function to display empty cells for human player
 
     // Friend class declaration for ComputerPlayer to access the grid for minimax
     friend class ComputerPlayer; 

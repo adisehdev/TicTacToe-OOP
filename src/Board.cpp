@@ -11,6 +11,18 @@ void Board::reset() { //implementation of reset function
     board.assign(SIDE, vector<char>(SIDE, EMPTY_CELL));
 }
 
+void Board::humanStatus() { //implementation of humanStatus function
+    cout << "Empty cells for human player: ";   // Display empty cells for human player
+    for (int i = 0; i < SIDE; i++) {
+        for (int j = 0; j < SIDE; j++) {
+            if (board[i][j] == EMPTY_CELL) {
+                cout << (i * SIDE + j + 1) << " "; // Display cell number
+            }
+        }
+    }
+    cout << endl;
+}
+
 void Board::display() const { //implementation of display function
     for (int i = 0; i < SIDE; i++) {
         for (int j = 0; j < SIDE; j++) {
