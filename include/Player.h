@@ -31,7 +31,7 @@ public:
 class ComputerPlayer : public Player {
 private:
     char opponentSymbol;
-    int minimax(Board& board, bool isMaximizing);
+    int minimax(Board& board, bool isMaximizing,int alpha, int beta);
 
 public:
     ComputerPlayer(char sym, char oppSym) : Player(sym), opponentSymbol(oppSym) {}

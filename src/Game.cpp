@@ -8,6 +8,7 @@ using namespace std;
 Game::Game()
 { // constructor to initialize the game
     board.showInstructions();
+    board.reset(); // Reset the board to its initial state
     char choice;
     cout << "Do you want to start first? (y/n): ";
     cin >> choice;
@@ -41,38 +42,58 @@ void Game::switchPlayer()
 
 
 
-void Game::run()
-{
-    while (true)
-    {   cout << "\nCurrent Player: " << currentPlayer->getSymbol() << endl;
-        if(currentPlayer->getSymbol() == 'X')
-        { // If the current player is the human player
-            board.humanStatus(); // Display empty cells for human player
+void Game::run() {
+    while (true) {
+        // --- 1. Announce Turn & Show Board BEFORE Move ---
+        cout << "\n----------------------------------------\n";
+        cout << "Current Player: " << currentPlayer->getSymbol() << endl;
+        cout << "Board state before move:" << endl;
+        board.display();
+
+        if(currentPlayer->getSymbol() == 'X') {
+            board.humanStatus(); // Show empty cells for human player
         }
-        cout << "\nCurrent Board State:\n";
-        board.display();                          // display the current state of the board
-        int move = currentPlayer->getMove(board); // get the move from the current player
-        if (!board.placeMove(move, currentPlayer->getSymbol()))
-        { // place the move
-            cout << "Invalid move. Try again." << endl;
-            continue; // If the move is invalid, continue to the next iteration of the loop
+
+        // --- 2. Get a Valid Move ---
+        // This loop ensures we only proceed once a valid move is entered.
+        int move;
+        bool movePlaced = false;
+        do {
+            move = currentPlayer->getMove(board); // Polymorphic call to get move
+            
+            // Try to place the move on the board
+            if (board.placeMove(move, currentPlayer->getSymbol())) {
+                movePlaced = true; // Move was successful
+            } else {
+                // Only show an error message for the human player.
+                // The computer should theoretically never choose an invalid move.
+                if (dynamic_cast<HumanPlayer*>(currentPlayer)) {
+                    cout << "Invalid move. That cell is either taken or out of bounds. Try again." << endl;
+                }
+            }
+        } while (!movePlaced);
+
+        // --- 3. Show Board AFTER Move ---
+        cout << "\nBoard state after move:" << endl;
+        board.display();
+
+        // For clarity, announce the computer's move
+        if (dynamic_cast<ComputerPlayer*>(currentPlayer)) {
+            cout << "COMPUTER (" << currentPlayer->getSymbol() << ") chose cell " << move << endl;
         }
-        if (currentPlayer->getSymbol() == 'O')
-        { // If the current player is the computer
-            cout << "COMPUTER has put a " << currentPlayer->getSymbol() << " in cell " << move << "\n";
+
+        // --- 4. Check for Game Over Conditions ---
+        if (board.checkWin(currentPlayer->getSymbol())) {
+            cout << "\n>>> Player " << currentPlayer->getSymbol() << " wins! <<<" << endl;
+            break; // Exit the game loop
         }
-        if (board.checkWin(currentPlayer->getSymbol()))
-        {                    // check if the current player has won
-            board.display(); // display the final state of the board
-            cout << "Player " << currentPlayer->getSymbol() << " wins!" << endl;
-            break; // Exit the loop if a player has won
+
+        if (board.isFull()) {
+            cout << "\n>>> It's a draw! <<<" << endl;
+            break; // Exit the game loop
         }
-        if (board.isFull())
-        {                    // check if the board is full
-            board.display(); // display the final state of the board
-            cout << "It's a draw!" << endl;
-            break; // Exit the loop if the game is a draw
-        }
-        switchPlayer(); // switch to the next player
+
+        // --- 5. Switch to the Next Player ---
+        switchPlayer();
     }
 }
