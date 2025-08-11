@@ -50,7 +50,7 @@ void Game::run()
             cout << "Invalid move. Try again." << endl;
             continue; // If the move is invalid, continue to the next iteration of the loop
         }
-        if (currentPlayer->getSymbol() == 'O' && board.placeMove(move, currentPlayer->getSymbol()))
+        if (currentPlayer->getSymbol() == 'O')
         { // If the current player is the computer
             cout << "COMPUTER has put a " << currentPlayer->getSymbol() << " in cell " << move << "\n";
         }
