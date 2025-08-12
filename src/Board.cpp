@@ -24,11 +24,13 @@ void Board::humanStatus() { //implementation of humanStatus function
 }
 
 void Board::display() const { //implementation of display function
+    cout<<" _ _ _ _ _ _ _ \n";
     for (int i = 0; i < SIDE; i++) {
         for (int j = 0; j < SIDE; j++) {
-            cout << board[i][j] << " ";
+            cout <<"|_"<< board[i][j] << "_|";
         }
         cout << endl;
+        
     }
 }
 
